@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <pthread.h>
+
+pthread_mutex_t mtxA = PTHREAD_MUTEX_INITIALIZER, mtxB = PTHREAD_MUTEX_INITIALIZER;
+
+void* monitor(void* arg) {
+    // Lock lowest memory address first to prevent deadlock
+    pthread_mutex_t *f = (&mtxA < &mtxB) ? &mtxA : &mtxB;
+    pthread_mutex_t *s = (&mtxA < &mtxB) ? &mtxB : &mtxA;
+
+    pthread_mutex_lock(f); pthread_mutex_lock(s);
+    printf("[%s] Patient Vitals OK\n", (char*)arg);
+    pthread_mutex_unlock(s); pthread_mutex_unlock(f);
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, monitor, "ECG");
+    pthread_create(&t2, NULL, monitor, "EEG");
+    pthread_join(t1, NULL); pthread_join(t2, NULL);
+}

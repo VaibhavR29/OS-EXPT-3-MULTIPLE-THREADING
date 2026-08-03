@@ -1,0 +1,18 @@
+single
+#include <stdio.h>
+
+void check_ecg() {
+    printf("[ECG] Heart Rate: 72 BPM (OK)\n");
+}
+
+void check_eeg() {
+    printf("[EEG] Brain Waves: Stable (OK)\n");
+}
+
+int main() {
+    printf("--- Stroke Patient Monitoring ---\n");
+    check_ecg();
+    check_eeg();
+    printf("--- Assessment Complete ---\n");
+    return 0;
+}
